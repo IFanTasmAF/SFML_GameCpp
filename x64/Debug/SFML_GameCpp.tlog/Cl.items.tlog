@@ -1,0 +1,9 @@
+C:\Users\akhme\source\repos\SFML_GameCpp\SFML_GameCpp\core\Game.cpp;C:\Users\akhme\source\repos\SFML_GameCpp\SFML_GameCpp\x64\Debug\Game.obj
+C:\Users\akhme\source\repos\SFML_GameCpp\SFML_GameCpp\core\main.cpp;C:\Users\akhme\source\repos\SFML_GameCpp\SFML_GameCpp\x64\Debug\main.obj
+C:\Users\akhme\source\repos\SFML_GameCpp\SFML_GameCpp\entities\AggressiveMonster.cpp;C:\Users\akhme\source\repos\SFML_GameCpp\SFML_GameCpp\x64\Debug\AggressiveMonster.obj
+C:\Users\akhme\source\repos\SFML_GameCpp\SFML_GameCpp\entities\PassiveMonster.cpp;C:\Users\akhme\source\repos\SFML_GameCpp\SFML_GameCpp\x64\Debug\PassiveMonster.obj
+C:\Users\akhme\source\repos\SFML_GameCpp\SFML_GameCpp\entities\Player.cpp;C:\Users\akhme\source\repos\SFML_GameCpp\SFML_GameCpp\x64\Debug\Player.obj
+C:\Users\akhme\source\repos\SFML_GameCpp\SFML_GameCpp\states\GameOverState.cpp;C:\Users\akhme\source\repos\SFML_GameCpp\SFML_GameCpp\x64\Debug\GameOverState.obj
+C:\Users\akhme\source\repos\SFML_GameCpp\SFML_GameCpp\states\PlayState.cpp;C:\Users\akhme\source\repos\SFML_GameCpp\SFML_GameCpp\x64\Debug\PlayState.obj
+C:\Users\akhme\source\repos\SFML_GameCpp\SFML_GameCpp\ui\UI.cpp;C:\Users\akhme\source\repos\SFML_GameCpp\SFML_GameCpp\x64\Debug\UI.obj
+C:\Users\akhme\source\repos\SFML_GameCpp\SFML_GameCpp\world\Map.cpp;C:\Users\akhme\source\repos\SFML_GameCpp\SFML_GameCpp\x64\Debug\Map.obj
