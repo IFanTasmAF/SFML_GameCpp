@@ -1,12 +1,10 @@
 #include "PassiveMonster.h"
 
-PassiveMonster::PassiveMonster(float x, float y) : Monster(x, y) {
-  shape.setSize(sf::Vector2f(40.f, 40.f));
+PassiveMonster::PassiveMonster(float x, float y) : Entity(x, y) {
+  shape.setSize({40.f, 40.f});
   shape.setFillColor(sf::Color::Blue);
 }
 
 void PassiveMonster::update(float dt) {
-  // стоит на месте
+  // ничего не делает
 }
-
-void PassiveMonster::draw(sf::RenderWindow& window) { window.draw(shape); }
