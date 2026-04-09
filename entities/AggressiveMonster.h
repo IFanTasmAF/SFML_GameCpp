@@ -1,10 +1,10 @@
 #pragma once
-#include "Entity.h"
+#include "Monster.h"
 
-class AggressiveMonster : public Entity {
- public:
-  AggressiveMonster(int x, int y);
+class AggressiveMonster : public Monster {
+public:
+    AggressiveMonster(float x, float y);
 
-  void update(float dt) override;
-  void draw(sf::RenderWindow& window) override;
+    void update(float dt) override;
+    void draw(sf::RenderWindow& window) override;
 };

@@ -1,9 +1,9 @@
 #pragma once
-#include "Entity.h"
+#include "Monster.h"
 
-class PassiveMonster : public Entity {
+class PassiveMonster : public Monster {
  public:
-  PassiveMonster(int x, int y);
+  PassiveMonster(float x, float y);
 
   void update(float dt) override;
   void draw(sf::RenderWindow& window) override;
