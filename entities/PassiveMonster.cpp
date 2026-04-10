@@ -1,10 +1,9 @@
 #include "PassiveMonster.h"
 
-PassiveMonster::PassiveMonster(float x, float y) : Entity(x, y) {
-  shape.setSize({40.f, 40.f});
-  shape.setFillColor(sf::Color::Blue);
+PassiveMonster::PassiveMonster(float x, float y) : Monster(x, y) {
+  shape.setFillColor(sf::Color::Yellow);
 }
 
-void PassiveMonster::update(float dt) {
+void PassiveMonster::update(float dt, const sf::Vector2f& playerPos) {
   // ничего не делает
 }

@@ -1,6 +1,4 @@
-#ifndef GAME_H
-#define GAME_H
-
+#pragma once
 #include <SFML/Graphics.hpp>
 
 class GameState;
@@ -19,5 +17,3 @@ class Game {
   sf::RenderWindow window;
   GameState* current_state;
 };
-
-#endif

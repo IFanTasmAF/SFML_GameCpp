@@ -18,3 +18,5 @@ void GameOverState::handleInput(sf::RenderWindow& window) {
 void GameOverState::update(float dt) {}
 
 void GameOverState::render(sf::RenderWindow& window) { window.draw(text); }
+
+

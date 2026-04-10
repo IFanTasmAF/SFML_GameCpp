@@ -21,7 +21,7 @@ void Map::generate() {
   }
 }
 
-bool Map::isWalkable(int x, int y) {
+bool Map::isWalkable(int x, int y) const {
   if (x < 0 || y < 0 || x >= width || y >= height) return false;
 
   return grid[y][x].type == TileType::Floor;

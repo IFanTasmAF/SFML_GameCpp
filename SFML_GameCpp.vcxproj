@@ -22,6 +22,7 @@
     <ClCompile Include="core\Game.cpp" />
     <ClCompile Include="core\main.cpp" />
     <ClCompile Include="entities\AggressiveMonster.cpp" />
+    <ClCompile Include="entities\Monster.cpp" />
     <ClCompile Include="entities\PassiveMonster.cpp" />
     <ClCompile Include="entities\Player.cpp" />
     <ClCompile Include="states\GameOverState.cpp" />

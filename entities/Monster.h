@@ -2,9 +2,11 @@
 #include "Entity.h"
 
 class Monster : public Entity {
-public:
-    Monster(float x, float y) : Entity(x, y) {}
+ protected:
+  float speed;
 
-    virtual void update(float dt) = 0;
-    virtual void draw(sf::RenderWindow& window) = 0;
+ public:
+  Monster(float x, float y);
+
+  virtual void update(float dt, const sf::Vector2f& playerPos);
 };

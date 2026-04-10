@@ -1,8 +1,22 @@
 #include "AggressiveMonster.h"
 
-AggressiveMonster::AggressiveMonster(float x, float y) : Entity(x, y) {
-  shape.setSize({40.f, 40.f});
+#include <cmath>
+
+AggressiveMonster::AggressiveMonster(float x, float y) : Monster(x, y) {
   shape.setFillColor(sf::Color::Red);
 }
 
-void AggressiveMonster::update(float dt) { shape.move({50.f * dt, 0.f}); }
+void AggressiveMonster::update(float dt, const sf::Vector2f& playerPos) {
+  sf::Vector2f dir = playerPos - getPosition();
+
+  float len = std::sqrt(dir.x * dir.x + dir.y * dir.y);
+
+  if (len > 0) {
+    dir /= len;
+
+    // держим дистанцию (фикс прилипания)
+    if (len > 25.f) {
+      move(dir * 120.f * dt);
+    }
+  }
+}

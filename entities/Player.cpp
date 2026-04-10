@@ -1,17 +1,26 @@
 #include "Player.h"
 
-Player::Player(float x, float y) : Entity(x, y) {
-  shape.setSize({50.f, 50.f});
-  shape.setFillColor(sf::Color::Green);
+#include <SFML/Window/Keyboard.hpp>
+#include <cmath>
+
+Player::Player() : Entity(100.f, 100.f), speed(200.f), hp(100) {}
+
+sf::Vector2f Player::getVelocity() const {
+  sf::Vector2f movement(0.f, 0.f);
+
+  if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W)) movement.y -= 1.f;
+  if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S)) movement.y += 1.f;
+  if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)) movement.x -= 1.f;
+  if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D)) movement.x += 1.f;
+
+  if (movement.x != 0 || movement.y != 0) {
+    float length = std::sqrt(movement.x * movement.x + movement.y * movement.y);
+    movement /= length;
+  }
+
+  return movement * speed;
 }
 
 void Player::update(float dt) {
-  sf::Vector2f movement(0.f, 0.f);
-
-  if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W)) movement.y -= speed;
-  if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S)) movement.y += speed;
-  if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)) movement.x -= speed;
-  if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D)) movement.x += speed;
-
-  shape.move(movement * dt);  // ПЛАВНОЕ движение
+  // теперь пусто или можно оставить
 }

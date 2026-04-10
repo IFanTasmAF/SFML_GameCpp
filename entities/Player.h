@@ -3,13 +3,15 @@
 
 class Player : public Entity {
  private:
-  float speed = 200.f;
-  int hp = 100;
+  float speed;
+  int hp;
 
  public:
-  Player(float x, float y);
+  Player();
 
   void update(float dt) override;
 
-  int getHp() const { return hp; }
+  int getHp() const;
+
+  sf::Vector2f getVelocity() const;
 };

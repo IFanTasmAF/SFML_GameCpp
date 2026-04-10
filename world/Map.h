@@ -17,5 +17,5 @@ class Map {
   void generate();
   void draw(sf::RenderWindow& window);
 
-  bool isWalkable(int x, int y);
+  bool isWalkable(int x, int y) const;
 };

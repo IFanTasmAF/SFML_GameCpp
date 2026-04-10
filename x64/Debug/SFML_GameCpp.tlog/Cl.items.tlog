@@ -1,6 +1,7 @@
 C:\Users\akhme\source\repos\SFML_GameCpp\SFML_GameCpp\core\Game.cpp;C:\Users\akhme\source\repos\SFML_GameCpp\SFML_GameCpp\x64\Debug\Game.obj
 C:\Users\akhme\source\repos\SFML_GameCpp\SFML_GameCpp\core\main.cpp;C:\Users\akhme\source\repos\SFML_GameCpp\SFML_GameCpp\x64\Debug\main.obj
 C:\Users\akhme\source\repos\SFML_GameCpp\SFML_GameCpp\entities\AggressiveMonster.cpp;C:\Users\akhme\source\repos\SFML_GameCpp\SFML_GameCpp\x64\Debug\AggressiveMonster.obj
+C:\Users\akhme\source\repos\SFML_GameCpp\SFML_GameCpp\entities\Monster.cpp;C:\Users\akhme\source\repos\SFML_GameCpp\SFML_GameCpp\x64\Debug\Monster.obj
 C:\Users\akhme\source\repos\SFML_GameCpp\SFML_GameCpp\entities\PassiveMonster.cpp;C:\Users\akhme\source\repos\SFML_GameCpp\SFML_GameCpp\x64\Debug\PassiveMonster.obj
 C:\Users\akhme\source\repos\SFML_GameCpp\SFML_GameCpp\entities\Player.cpp;C:\Users\akhme\source\repos\SFML_GameCpp\SFML_GameCpp\x64\Debug\Player.obj
 C:\Users\akhme\source\repos\SFML_GameCpp\SFML_GameCpp\states\GameOverState.cpp;C:\Users\akhme\source\repos\SFML_GameCpp\SFML_GameCpp\x64\Debug\GameOverState.obj

@@ -1,6 +1,4 @@
-#ifndef GAMEOVERSTATE_H
-#define GAMEOVERSTATE_H
-
+#pragma once
 #include <SFML/Graphics.hpp>
 
 #include "GameState.h"
@@ -17,5 +15,3 @@ class GameOverState : public GameState {
   sf::Font font;
   sf::Text text;
 };
-
-#endif

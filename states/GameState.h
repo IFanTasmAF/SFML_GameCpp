@@ -1,9 +1,5 @@
-#ifndef GAMESTATE_H
-#define GAMESTATE_H
-
+#pragma once
 #include <SFML/Graphics.hpp>
-
-class Game;
 
 class GameState {
  public:
@@ -13,5 +9,3 @@ class GameState {
   virtual void update(float dt) = 0;
   virtual void render(sf::RenderWindow& window) = 0;
 };
-
-#endif
