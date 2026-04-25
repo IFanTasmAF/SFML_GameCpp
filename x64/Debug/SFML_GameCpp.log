@@ -1,3 +1,5 @@
 ﻿  ResourceManager.cpp
 C:\Users\akhme\source\repos\SFML_GameCpp\SFML_GameCpp\ResourceManager.cpp(14,26): warning C4834: удаление возвращаемого значения функции с атрибутом [[nodiscard]]
+  UIManager.cpp
+  Создание кода...
   SFML_GameCpp.vcxproj -> C:\Users\akhme\source\repos\SFML_GameCpp\x64\Debug\SFML_GameCpp.exe

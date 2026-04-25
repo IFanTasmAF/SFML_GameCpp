@@ -18,7 +18,9 @@
 
 std::mt19937 rng(std::random_device{}());
 
-// ------------------- вспомогательные функции -------------------
+// ----------------------------------------------------------------------
+// вспомогательные функции (без статик, кроме генератора)
+// ----------------------------------------------------------------------
 sf::Vector2i getRandomEmptyFloorPosition(
     const Map& map, const std::vector<std::unique_ptr<Entity>>& entities,
     const sf::Vector2i& avoidPos, int minDistance) {
@@ -72,13 +74,9 @@ CentipedePlacement getRandomPositionForCentipede(
       for (const auto& dir : dirs) {
         bool ok = true;
         for (int i = 1; i < requiredLength; ++i) {
-          int nx = x + dir.x * i;
-          int ny = y + dir.y * i;
-          if (nx < 0 || nx >= MAP_WIDTH || ny < 0 || ny >= MAP_HEIGHT) {
-            ok = false;
-            break;
-          }
-          if (!map.isWalkable(nx, ny)) {
+          sf::Vector2i p(x + dir.x * i, y + dir.y * i);
+          if (p.x < 0 || p.x >= MAP_WIDTH || p.y < 0 || p.y >= MAP_HEIGHT ||
+              !map.isWalkable(p.x, p.y)) {
             ok = false;
             break;
           }
@@ -90,11 +88,9 @@ CentipedePlacement getRandomPositionForCentipede(
       }
     }
   }
-  // fallback: если нет идеального места, ищем любую свободную клетку для головы
   if (candidates.empty()) {
     sf::Vector2i fallback =
         getRandomEmptyFloorPosition(map, entities, avoidPos, minDistance);
-    // используем направление вниз (0,1) – если нет места, будет только голова
     return {fallback, {0, 1}};
   }
   std::uniform_int_distribution<int> dist(
@@ -132,32 +128,34 @@ sf::Vector2i findFarthestReachable(const Map& map, sf::Vector2i start) {
   return farthest;
 }
 
-// ------------------- конструктор -------------------
+// ----------------------------------------------------------------------
+// конструктор
+// ----------------------------------------------------------------------
 ExploringState::ExploringState(Game& game)
-    : game_(game),
-      map_(MAP_WIDTH, MAP_HEIGHT),
-      hero_(sf::Vector2i(MAP_WIDTH / 2, MAP_HEIGHT / 2),
-            ResourceManager::getInstance().getTexture("hero")),
-      ui_(ResourceManager::getInstance().getFont()),
-      messageTimer_(0.f),
-      lastMoveDirection_(0, 0),
-      currentDt_(0.f) {
-  map_.loadFromPrefab();
-  map_.updateExploredAround(hero_.getPosition(), VIEW_RADIUS);
+    : game(game),
+      map(MAP_WIDTH, MAP_HEIGHT),
+      hero(sf::Vector2i(MAP_WIDTH / 2, MAP_HEIGHT / 2),
+           ResourceManager::getInstance().getTexture("hero")),
+      ui(ResourceManager::getInstance().getFont()),
+      messageTimer(0.f),
+      lastMoveDirection(0, 0),
+      currentDt(0.f) {
+  map.loadFromPrefab();
+  map.updateExploredAround(hero.getPosition(), VIEW_RADIUS);
 
   auto& tex = ResourceManager::getInstance();
-  entities_.clear();
+  entities.clear();
 
   // личинки
   for (int i = 0; i < 4; ++i) {
     sf::Vector2i pos =
-        getRandomEmptyFloorPosition(map_, entities_, hero_.getPosition(), 4);
-    entities_.push_back(std::make_unique<Larva>(pos, tex.getTexture("larva")));
+        getRandomEmptyFloorPosition(map, entities, hero.getPosition(), 4);
+    entities.push_back(std::make_unique<Larva>(pos, tex.getTexture("larva")));
   }
 
   // многоножка
   CentipedePlacement placement = getRandomPositionForCentipede(
-      map_, entities_, hero_.getPosition(), 7, CENTIPEDE_LENGTH);
+      map, entities, hero.getPosition(), 7, CENTIPEDE_LENGTH);
   addCentipede(placement.head, placement.direction);
 
   // сундуки
@@ -165,29 +163,30 @@ ExploringState::ExploringState(Game& game)
                                  LootType::Trap};
   for (int i = 0; i < 3; ++i) {
     sf::Vector2i pos =
-        getRandomEmptyFloorPosition(map_, entities_, hero_.getPosition(), 3);
-    entities_.push_back(std::make_unique<Chest>(pos, tex.getTexture("chest"),
-                                                loots[i % loots.size()]));
+        getRandomEmptyFloorPosition(map, entities, hero.getPosition(), 3);
+    entities.push_back(std::make_unique<Chest>(pos, tex.getTexture("chest"),
+                                               loots[i % loots.size()]));
   }
 
   // выход
-  sf::Vector2i exitPos = findFarthestReachable(map_, hero_.getPosition());
-  entities_.push_back(std::make_unique<Exit>(exitPos, tex.getTexture("exit")));
+  sf::Vector2i exitPos = findFarthestReachable(map, hero.getPosition());
+  entities.push_back(std::make_unique<Exit>(exitPos, tex.getTexture("exit")));
 
-  // камера: приближаем (уменьшаем размер вида)
-  float zoomFactor = 0.8f;  // приближение
-  camera_.setSize(sf::Vector2f(static_cast<float>(WINDOW_WIDTH) * zoomFactor,
-                               static_cast<float>(WINDOW_HEIGHT) * zoomFactor));
+  camera.setSize(sf::Vector2f(static_cast<float>(WINDOW_WIDTH),
+                              static_cast<float>(WINDOW_HEIGHT)));
   updateCamera();
 }
 
+// ----------------------------------------------------------------------
+// добавление многоножки
+// ----------------------------------------------------------------------
 void ExploringState::addCentipede(const sf::Vector2i& headPos,
                                   const sf::Vector2i& direction) {
   std::vector<sf::Vector2i> positions;
   positions.push_back(headPos);
-  for (int i = 1; i < CENTIPEDE_LENGTH; ++i)
+  for (int i = 1; i < CENTIPEDE_LENGTH; ++i) {
     positions.push_back(headPos + direction * i);
-
+  }
   std::vector<CentipedeSegment*> segments;
   for (size_t i = 0; i < positions.size(); ++i) {
     CentipedeSegment::SegmentType type;
@@ -199,7 +198,7 @@ void ExploringState::addCentipede(const sf::Vector2i& headPos,
       type = CentipedeSegment::SegmentType::Body;
     auto seg = std::make_unique<CentipedeSegment>(positions[i], type, i == 0);
     segments.push_back(seg.get());
-    entities_.push_back(std::move(seg));
+    entities.push_back(std::move(seg));
   }
   for (size_t i = 0; i < segments.size(); ++i) {
     if (i > 0) segments[i]->setPrevSegment(segments[i - 1]);
@@ -208,7 +207,7 @@ void ExploringState::addCentipede(const sf::Vector2i& headPos,
 }
 
 CentipedeSegment* ExploringState::getCentipedeHead() {
-  for (auto& e : entities_) {
+  for (auto& e : entities) {
     if (auto* seg = dynamic_cast<CentipedeSegment*>(e.get())) {
       if (seg->isHead()) return seg;
     }
@@ -216,8 +215,11 @@ CentipedeSegment* ExploringState::getCentipedeHead() {
   return nullptr;
 }
 
+// ----------------------------------------------------------------------
+// обработка ввода и движение
+// ----------------------------------------------------------------------
 void ExploringState::handleInput(const sf::Event& event, Game& game) {
-  if (!hero_.isAlive()) return;
+  if (!hero.isAlive()) return;
   if (const auto* keyPressed = event.getIf<sf::Event::KeyPressed>()) {
     switch (keyPressed->code) {
       case sf::Keyboard::Key::Up:
@@ -245,7 +247,7 @@ void ExploringState::handleInput(const sf::Event& event, Game& game) {
         moveHero(1, 0, game);
         break;
       case sf::Keyboard::Key::Q:
-        hero_.useHealthPotion();
+        hero.useHealthPotion();
         addMessage("used potion");
         break;
       default:
@@ -255,11 +257,11 @@ void ExploringState::handleInput(const sf::Event& event, Game& game) {
 }
 
 void ExploringState::moveHero(int dx, int dy, Game& game) {
-  if (dx != 0 || dy != 0) lastMoveDirection_ = sf::Vector2i(dx, dy);
-  sf::Vector2i newPos = hero_.getPosition() + sf::Vector2i(dx, dy);
-  if (!map_.isWalkable(newPos.x, newPos.y)) return;
+  if (dx != 0 || dy != 0) lastMoveDirection = sf::Vector2i(dx, dy);
+  sf::Vector2i newPos = hero.getPosition() + sf::Vector2i(dx, dy);
+  if (!map.isWalkable(newPos.x, newPos.y)) return;
   Entity* target = nullptr;
-  for (auto& e : entities_)
+  for (auto& e : entities)
     if (e->getPosition() == newPos) {
       target = e.get();
       break;
@@ -277,48 +279,53 @@ void ExploringState::moveHero(int dx, int dy, Game& game) {
       startCombat(game, *monster, true);
       return;
     } else if (auto* chest = dynamic_cast<Chest*>(target)) {
-      chest->interact(hero_);
+      chest->interact(hero);
       generateNoise(NOISE_CHEST);
       addMessage("opened chest!");
       removeEntity(chest);
     }
   }
-  hero_.setPosition(newPos);
-  map_.updateExploredAround(hero_.getPosition(), VIEW_RADIUS);
+  hero.setPosition(newPos);
+  map.updateExploredAround(hero.getPosition(), VIEW_RADIUS);
   generateNoise(NOISE_WALK);
   updateMonsters(game);
   checkExit(game);
 }
 
+// ----------------------------------------------------------------------
+// обновление монстров и многоножки
+// ----------------------------------------------------------------------
 void ExploringState::updateMonsters(Game& game) {
-  // обычные монстры (личинки)
-  for (auto& entity : entities_) {
+  // 1. обычные монстры (личинки)
+  for (auto& entity : entities) {
     if (auto* monster = dynamic_cast<Monster*>(entity.get())) {
       if (dynamic_cast<CentipedeSegment*>(monster)) continue;
-      monster->update(currentDt_, map_, entities_);
-      if (monster->getPosition() == hero_.getPosition()) {
+      monster->update(currentDt, map, entities);
+      if (monster->getPosition() == hero.getPosition()) {
         startCombat(game, *monster, false);
         return;
       }
     }
   }
 
+  // 2. голова многоножки
   CentipedeSegment* head = getCentipedeHead();
   if (!head) return;
 
   sf::Vector2i oldHeadPos = head->getPosition();
-  head->update(currentDt_, map_, entities_);
-  if (head->getPosition() == hero_.getPosition()) {
+  head->update(currentDt, map, entities);
+  if (head->getPosition() == hero.getPosition()) {
     startCombat(game, *head, false);
     return;
   }
 
+  // 3. тела следуют за головой
   CentipedeSegment* current = head->getNextSegment();
   sf::Vector2i previousPos = oldHeadPos;
   while (current) {
     sf::Vector2i oldPos = current->getPosition();
     current->setPosition(previousPos);
-    if (current->getPosition() == hero_.getPosition()) {
+    if (current->getPosition() == hero.getPosition()) {
       startCombat(game, *current, false);
       return;
     }
@@ -327,9 +334,12 @@ void ExploringState::updateMonsters(Game& game) {
   }
 }
 
+// ----------------------------------------------------------------------
+// звук
+// ----------------------------------------------------------------------
 void ExploringState::generateNoise(int intensity) {
-  SoundEvent sound(hero_.getPosition(), intensity, 10.0f);
-  for (auto& entity : entities_) {
+  SoundEvent sound(hero.getPosition(), intensity, 10.0f);
+  for (auto& entity : entities) {
     if (auto* monster = dynamic_cast<Monster*>(entity.get())) {
       int dist = std::abs(sound.position.x - monster->getPosition().x) +
                  std::abs(sound.position.y - monster->getPosition().y);
@@ -338,81 +348,88 @@ void ExploringState::generateNoise(int intensity) {
   }
 }
 
+// ----------------------------------------------------------------------
+// вспомогательные методы
+// ----------------------------------------------------------------------
 void ExploringState::removeEntity(Entity* entity) {
-  auto it = std::find_if(entities_.begin(), entities_.end(),
+  auto it = std::find_if(entities.begin(), entities.end(),
                          [entity](const std::unique_ptr<Entity>& ptr) {
                            return ptr.get() == entity;
                          });
-  if (it != entities_.end()) entities_.erase(it);
+  if (it != entities.end()) entities.erase(it);
 }
 
 void ExploringState::addMessage(const std::string& msg) {
-  currentMessage_ = msg;
-  messageTimer_ = 2.0f;
+  currentMessage = msg;
+  messageTimer = 2.0f;
 }
 
 void ExploringState::update(float deltaTime) {
-  currentDt_ = deltaTime;
-  if (!hero_.isAlive()) {
-    game_.changeState(std::make_unique<GameOverState>(false));
+  currentDt = deltaTime;
+  if (!hero.isAlive()) {
+    game.changeState(std::make_unique<GameOverState>(false));
     return;
   }
   updateCamera();
-  if (messageTimer_ > 0) {
-    messageTimer_ -= deltaTime;
-    if (messageTimer_ <= 0) currentMessage_.clear();
+  if (messageTimer > 0) {
+    messageTimer -= deltaTime;
+    if (messageTimer <= 0) currentMessage.clear();
   }
 }
 
+// ----------------------------------------------------------------------
+// отрисовка
+// ----------------------------------------------------------------------
 void ExploringState::draw(sf::RenderWindow& window) {
-  window.setView(camera_);
+  window.setView(camera);
   auto& res = ResourceManager::getInstance();
-  map_.draw(window, res.getTexture("wall"), res.getTexture("floor1"),
-            res.getTexture("floor2"), res.getTexture("floor3"));
-  hero_.draw(window);
-  for (auto& e : entities_) {
+  map.draw(window, res.getTexture("wall"), res.getTexture("floor1"),
+           res.getTexture("floor2"), res.getTexture("floor3"));
+  hero.draw(window);
+  for (auto& e : entities) {
     sf::Vector2i pos = e->getPosition();
-    if (map_.isExplored(pos.x, pos.y)) {
+    if (map.isExplored(pos.x, pos.y)) {
       e->draw(window);
       if (auto* monster = dynamic_cast<Monster*>(e.get()))
         monster->drawAlert(window);
     }
   }
 
-  // ui view (экранные координаты)
   sf::View uiView(sf::FloatRect(
       sf::Vector2f(0.f, 0.f), sf::Vector2f(static_cast<float>(WINDOW_WIDTH),
                                            static_cast<float>(WINDOW_HEIGHT))));
   window.setView(uiView);
-  ui_.draw(window, hero_, currentMessage_);
+  ui.draw(window, hero, currentMessage);
   drawRadar(window);
 }
 
+// ----------------------------------------------------------------------
+// камера и радар
+// ----------------------------------------------------------------------
 void ExploringState::updateCamera() {
   sf::Vector2f heroPos(
-      static_cast<float>(hero_.getPosition().x * CELL_SIZE + CELL_SIZE / 2),
-      static_cast<float>(hero_.getPosition().y * CELL_SIZE + CELL_SIZE / 2));
-  camera_.setCenter(heroPos);
+      static_cast<float>(hero.getPosition().x * CELL_SIZE + CELL_SIZE / 2),
+      static_cast<float>(hero.getPosition().y * CELL_SIZE + CELL_SIZE / 2));
+  camera.setCenter(heroPos);
 
-  // ограничение камеры границами карты
   float left = 0.f;
   float top = 0.f;
   float right = static_cast<float>(MAP_WIDTH * CELL_SIZE);
   float bottom = static_cast<float>(MAP_HEIGHT * CELL_SIZE);
-  float halfW = camera_.getSize().x / 2.f;
-  float halfH = camera_.getSize().y / 2.f;
-  sf::Vector2f center = camera_.getCenter();
+  float halfW = static_cast<float>(WINDOW_WIDTH) / 2.f;
+  float halfH = static_cast<float>(WINDOW_HEIGHT) / 2.f;
+  sf::Vector2f center = camera.getCenter();
   if (center.x - halfW < left) center.x = left + halfW;
   if (center.y - halfH < top) center.y = top + halfH;
   if (center.x + halfW > right) center.x = right - halfW;
   if (center.y + halfH > bottom) center.y = bottom - halfH;
-  camera_.setCenter(center);
+  camera.setCenter(center);
 }
 
 void ExploringState::drawRadar(sf::RenderWindow& window) {
-  radarBlips_.clear();
-  sf::Vector2i heroPos = hero_.getPosition();
-  for (auto& e : entities_) {
+  radarBlips.clear();
+  sf::Vector2i heroPos = hero.getPosition();
+  for (auto& e : entities) {
     Monster* monster = dynamic_cast<Monster*>(e.get());
     if (!monster) continue;
     sf::Vector2i delta = monster->getPosition() - heroPos;
@@ -424,8 +441,9 @@ void ExploringState::drawRadar(sf::RenderWindow& window) {
     sf::Color color = (dynamic_cast<CentipedeSegment*>(monster))
                           ? sf::Color::Yellow
                           : sf::Color::Green;
-    radarBlips_.push_back({dir, color});
+    radarBlips.push_back({dir, color});
   }
+
   sf::RectangleShape radarBg(sf::Vector2f(static_cast<float>(RADAR_SIZE),
                                           static_cast<float>(RADAR_SIZE)));
   radarBg.setFillColor(sf::Color(0, 0, 0, 180));
@@ -434,13 +452,15 @@ void ExploringState::drawRadar(sf::RenderWindow& window) {
   radarBg.setPosition(sf::Vector2f(static_cast<float>(RADAR_POS_X),
                                    static_cast<float>(RADAR_POS_Y)));
   window.draw(radarBg);
+
   sf::CircleShape center(4);
   center.setFillColor(sf::Color::Cyan);
   center.setPosition(
       sf::Vector2f(static_cast<float>(RADAR_POS_X + RADAR_SIZE / 2 - 4),
                    static_cast<float>(RADAR_POS_Y + RADAR_SIZE / 2 - 4)));
   window.draw(center);
-  for (auto& blip : radarBlips_) {
+
+  for (auto& blip : radarBlips) {
     sf::CircleShape dot(3);
     dot.setFillColor(blip.color);
     float x = static_cast<float>(RADAR_POS_X + RADAR_SIZE / 2 +
@@ -453,7 +473,7 @@ void ExploringState::drawRadar(sf::RenderWindow& window) {
 }
 
 bool ExploringState::isOccupied(sf::Vector2i pos) {
-  for (auto& e : entities_)
+  for (auto& e : entities)
     if (e->getPosition() == pos) return true;
   return false;
 }
@@ -465,9 +485,9 @@ void ExploringState::startCombat(Game& game, Monster& monster,
 }
 
 void ExploringState::checkExit(Game& game) {
-  for (auto& e : entities_) {
+  for (auto& e : entities) {
     if (auto* exitEntity = dynamic_cast<Exit*>(e.get())) {
-      if (hero_.getPosition() == exitEntity->getPosition()) {
+      if (hero.getPosition() == exitEntity->getPosition()) {
         game.changeState(std::make_unique<GameOverState>(true));
         return;
       }

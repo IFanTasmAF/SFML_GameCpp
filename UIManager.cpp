@@ -6,33 +6,32 @@
 #include "Hero.h"
 
 UIManager::UIManager(sf::Font& font)
-    : font_(font),
-      healthText_(font, "", 20),
-      potionText_(font, "", 20),
-      messageText_(font, "", 16) {
-  healthText_.setFillColor(COLOR_TEXT);
-  potionText_.setFillColor(COLOR_TEXT);
-  messageText_.setFillColor(sf::Color::Yellow);
+    : font(font),
+      healthText(font, "", 20),
+      potionText(font, "", 20),
+      messageText(font, "", 16) {
+  healthText.setFillColor(COLOR_TEXT);
+  potionText.setFillColor(COLOR_TEXT);
+  messageText.setFillColor(sf::Color::Yellow);
 
-  // Позиция – на правом краю окна (отступ 20)
   float rightX = static_cast<float>(WINDOW_WIDTH - 20);
-  healthText_.setPosition(sf::Vector2f(rightX - 150, 10));
-  potionText_.setPosition(sf::Vector2f(rightX - 150, 50));
-  messageText_.setPosition(sf::Vector2f(rightX - 150, 90));
+  healthText.setPosition(sf::Vector2f(rightX - 150, 10));
+  potionText.setPosition(sf::Vector2f(rightX - 150, 50));
+  messageText.setPosition(sf::Vector2f(rightX - 150, 90));
 }
 
 void UIManager::draw(sf::RenderWindow& window, const Hero& hero,
                      const std::string& message) {
   std::stringstream ss;
-  ss << "HP: " << hero.getHp() << "/" << hero.getMaxHp();
-  healthText_.setString(ss.str());
-  window.draw(healthText_);
+  ss << "hp: " << hero.getHp() << "/" << hero.getMaxHp();
+  healthText.setString(ss.str());
+  window.draw(healthText);
 
   ss.str("");
-  ss << "Potions: " << hero.getPotionCount();
-  potionText_.setString(ss.str());
-  window.draw(potionText_);
+  ss << "potions: " << hero.getPotionCount();
+  potionText.setString(ss.str());
+  window.draw(potionText);
 
-  messageText_.setString(message);
-  window.draw(messageText_);
+  messageText.setString(message);
+  window.draw(messageText);
 }

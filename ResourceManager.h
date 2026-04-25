@@ -13,6 +13,6 @@ class ResourceManager {
 
  private:
   ResourceManager();
-  std::map<std::string, sf::Texture> textures_;
-  sf::Font font_;
+  std::map<std::string, sf::Texture> textures;
+  sf::Font font;
 };

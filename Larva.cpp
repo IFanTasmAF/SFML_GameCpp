@@ -10,6 +10,6 @@ void Larva::onDeath(Map&, std::vector<std::unique_ptr<Entity>>&) {}
 
 void Larva::update(float deltaTime, const Map& map,
                    const std::vector<std::unique_ptr<Entity>>& entities) {
-  mode_ = MonsterMode::Wandering;  // всегда блуждает
+  mode = MonsterMode::Wandering;
   Monster::update(deltaTime, map, entities);
 }

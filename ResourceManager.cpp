@@ -5,78 +5,63 @@
 #include "Constants.h"
 
 ResourceManager::ResourceManager() {
-  // ¬спомогательна€ функци€ Ц создаЄт текстуру из одного цвета
-  auto makeTexture = [](const sf::Color& color) -> sf::Texture {
+  // вспомогательна€ л€мбда: создаЄт текстуру-заглушку из цвета
+  auto makeFallback = [](const sf::Color& color) -> sf::Texture {
     sf::Image image({static_cast<unsigned int>(CELL_SIZE),
                      static_cast<unsigned int>(CELL_SIZE)},
                     color);
     sf::Texture texture;
-    texture.loadFromImage(image);  // игнорируем возможную ошибку Ц цветна€
-                                   // текстура всегда создаЄтс€
+    texture.loadFromImage(image);
     return texture;
   };
 
-  // ”ниверсальна€ загрузка текстуры из файла или создание цветной заглушки
-  auto loadTex = [&](const std::string& key, const std::string& path) {
+  // попытка загрузить текстуру из файла; если не удаЄтс€ Ц создаЄм цветную
+  auto loadOrFallback = [&](const std::string& key, const std::string& path,
+                            const sf::Color& fallbackColor) {
     sf::Texture tex;
     if (tex.loadFromFile(path)) {
-      textures_[key] = tex;
-      std::cout << "Loaded: " << path << std::endl;
+      textures[key] = tex;
+      std::cout << "loaded texture: " << path << std::endl;
     } else {
-      // ÷вета дл€ заглушек
-      sf::Color color = sf::Color::Magenta;
-      if (key == "hero")
-        color = COLOR_HERO;
-      else if (key == "head")
-        color = COLOR_HORROR;
-      else if (key == "body")
-        color = sf::Color(200, 100, 200);
-      else if (key == "tail")
-        color = sf::Color(180, 80, 180);
-      else if (key == "larva")
-        color = COLOR_STICKY;
-      else if (key == "wall")
-        color = COLOR_WALL;
-      else if (key.find("floor") == 0)
-        color = sf::Color(100, 100, 100);
-      else if (key == "chest")
-        color = COLOR_CHEST;
-      else if (key == "exit")
-        color = sf::Color(0, 255, 0);
-      textures_[key] = makeTexture(color);
-      std::cerr << "Warning: Could not load " << path << ", using fallback."
-                << std::endl;
+      textures[key] = makeFallback(fallbackColor);
+      std::cerr << "warning: could not load " << path
+                << ", using fallback color." << std::endl;
     }
   };
 
-  // «агрузка всех необходимых текстур
-  loadTex("hero", "textures/hero.png");
-  loadTex("head", "textures/head_centipide.png");
-  loadTex("body", "textures/body_centipide.png");
-  loadTex("tail", "textures/tail_centipide.png");
-  loadTex("larva", "textures/larva.png");
-  loadTex("wall", "textures/wall.png");
-  loadTex("floor1", "textures/floor_1.png");
-  loadTex("floor2", "textures/floor_2.png");
-  loadTex("floor3", "textures/floor_3.png");
-  loadTex("chest", "textures/chest.png");
-  loadTex("exit", "textures/exit.png");
+  // загрузка всех необходимых текстур
+  loadOrFallback("hero", "textures/hero.png", sf::Color::Cyan);
+  loadOrFallback("head", "textures/head_centipide.png", sf::Color::Red);
+  loadOrFallback("body", "textures/body_centipide.png", sf::Color::Magenta);
+  loadOrFallback("tail", "textures/tail_centipide.png", sf::Color::Yellow);
+  loadOrFallback("larva", "textures/larva.png", sf::Color::Green);
+  loadOrFallback("wall", "textures/wall.png", sf::Color(80, 80, 80));
+  loadOrFallback("floor1", "textures/floor_1.png", sf::Color(120, 120, 120));
+  loadOrFallback("floor2", "textures/floor_2.png", sf::Color(140, 140, 140));
+  loadOrFallback("floor3", "textures/floor_3.png", sf::Color(160, 160, 160));
+  loadOrFallback("chest", "textures/chest.png", sf::Color(255, 215, 0));
+  loadOrFallback("exit", "textures/exit.png", sf::Color(0, 255, 0));
 
-  // Ўрифт (сначала системный, потом local)
-  if (!font_.openFromFile("C:/Windows/Fonts/arial.ttf")) {
-    if (!font_.openFromFile("arial.ttf")) {
-      std::cerr << "Warning: Cannot load arial.ttf. Text will not be displayed."
+  // загрузка шрифта (сначала из системной папки, затем локально)
+  if (!font.openFromFile("C:/Windows/Fonts/arial.ttf")) {
+    if (!font.openFromFile("arial.ttf")) {
+      std::cerr << "warning: cannot load arial.ttf, text will not be displayed."
                 << std::endl;
+    } else {
+      std::cout << "loaded arial.ttf from local folder." << std::endl;
     }
+  } else {
+    std::cout << "loaded arial.ttf from system fonts." << std::endl;
   }
 }
 
 ResourceManager& ResourceManager::getInstance() {
-  static ResourceManager instance;  // единственный static Ц нужен дл€ синглтона
+  static ResourceManager instance;
   return instance;
 }
 
 sf::Texture& ResourceManager::getTexture(const std::string& key) {
-  return textures_[key];
+  return textures[key];
 }
-sf::Font& ResourceManager::getFont() { return font_; }
+
+sf::Font& ResourceManager::getFont() { return font; }

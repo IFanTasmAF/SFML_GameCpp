@@ -10,11 +10,11 @@ class Entity {
   virtual void draw(sf::RenderWindow& window);
   virtual void interact(Hero& hero) = 0;
   virtual void update(float deltaTime) {}
-  sf::Vector2i getPosition() const { return position_; }
+  sf::Vector2i getPosition() const { return position; }
   void setPosition(sf::Vector2i pos);
   void setPixelPosition(const sf::Vector2f& pixelPos);
 
  protected:
-  sf::Vector2i position_;
-  sf::Sprite sprite_;
+  sf::Vector2i position;
+  sf::Sprite sprite;
 };

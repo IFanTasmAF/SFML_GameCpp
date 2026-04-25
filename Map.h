@@ -16,16 +16,16 @@ class Map {
   void draw(sf::RenderWindow& window, const sf::Texture& wallTex,
             const sf::Texture& floor1Tex, const sf::Texture& floor2Tex,
             const sf::Texture& floor3Tex);
-  int getWidth() const { return width_; }
-  int getHeight() const { return height_; }
+  int getWidth() const { return width; }
+  int getHeight() const { return height; }
 
   bool isExplored(int x, int y) const;
   void setExplored(int x, int y, bool explored);
   void updateExploredAround(sf::Vector2i center, int radius);
 
  private:
-  int width_, height_;
-  std::vector<std::vector<TileType>> tiles_;
-  std::vector<std::vector<bool>> explored_;
-  std::vector<std::vector<int>> floorVariant_;
+  int width, height;
+  std::vector<std::vector<TileType>> tiles;
+  std::vector<std::vector<bool>> explored;
+  std::vector<std::vector<int>> floorVariant;
 };

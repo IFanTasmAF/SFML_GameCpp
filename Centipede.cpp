@@ -13,43 +13,43 @@ CentipedeSegment::CentipedeSegment(sf::Vector2i pos, SegmentType type,
                       ? "head"
                       : ((type == SegmentType::Tail) ? "tail" : "body")),
               CENTIPEDE_SEGMENT_HP, CENTIPEDE_DAMAGE),
-      isHead_(isHead),
-      type_(type),
-      nextSegment_(nullptr),
-      prevSegment_(nullptr),
-      targetPos_(pos),
-      previousPos_(pos) {}
+      isHeadSegment(isHead),
+      type(type),
+      nextSegment(nullptr),
+      prevSegment(nullptr),
+      targetPos(pos),
+      previousPos(pos) {}
 
 void CentipedeSegment::onDeath(Map&, std::vector<std::unique_ptr<Entity>>&) {
-  if (!isHead_) {
-    if (prevSegment_) prevSegment_->setNextSegment(nextSegment_);
-    if (nextSegment_) nextSegment_->setPrevSegment(prevSegment_);
+  if (!isHeadSegment) {
+    if (prevSegment) prevSegment->setNextSegment(nextSegment);
+    if (nextSegment) nextSegment->setPrevSegment(prevSegment);
   }
 }
 
 void CentipedeSegment::update(
     float deltaTime, const Map& map,
     const std::vector<std::unique_ptr<Entity>>& entities) {
-  if (isHead_) {
+  if (isHeadSegment) {
     Monster::update(deltaTime, map, entities);
-    if (nextSegment_) {
-      nextSegment_->setTargetPos(position_);
+    if (nextSegment) {
+      nextSegment->setTargetPos(position);
     }
   } else {
-    if (prevSegment_) {
-      setPosition(prevSegment_->getPosition());
+    if (prevSegment) {
+      setPosition(prevSegment->getPosition());
     }
   }
 }
 
 void CentipedeSegment::drawAlert(sf::RenderWindow& window) {
-  if (isHead_ && alertTimer_ > 0.f) {
+  if (isHeadSegment && alertTimer > 0.f) {
     sf::Text exclamation(ResourceManager::getInstance().getFont(), "!", 24);
     exclamation.setFillColor(sf::Color::Red);
     exclamation.setStyle(sf::Text::Bold);
     exclamation.setPosition(
-        sf::Vector2f(sprite_.getPosition().x + CELL_SIZE / 2 - 8,
-                     sprite_.getPosition().y - 20));
+        sf::Vector2f(sprite.getPosition().x + CELL_SIZE / 2 - 8,
+                     sprite.getPosition().y - 20));
     window.draw(exclamation);
   }
 }

@@ -22,17 +22,17 @@ class Monster : public Entity {
                       const std::vector<std::unique_ptr<Entity>>& entities);
   void interact(Hero& hero, bool heroAttacksFirst);
   void interact(Hero& hero) override {}
-  void setMode(MonsterMode mode) { mode_ = mode; }
+  void setMode(MonsterMode mode) { this->mode = mode; }
   virtual void drawAlert(sf::RenderWindow& window);
-  int getHp() const { return hp_; }
-  int getDamage() const { return damage_; }
-  bool isAlive() const { return hp_ > 0; }
+  int getHp() const { return hp; }
+  int getDamage() const { return damage; }
+  bool isAlive() const { return hp > 0; }
 
  protected:
   bool isOccupied(sf::Vector2i pos,
                   const std::vector<std::unique_ptr<Entity>>& entities) const;
-  int hp_, maxHp_, damage_;
-  MonsterMode mode_;
-  sf::Vector2i targetSoundPos_;
-  float alertTimer_;
+  int hp, maxHp, damage;
+  MonsterMode mode;
+  sf::Vector2i targetSoundPos;
+  float alertTimer;
 };

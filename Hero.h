@@ -9,14 +9,14 @@ class Hero : public Entity {
   void heal(int amount);
   void useHealthPotion();
   void addPotion(int count = 1);
-  int getHp() const { return hp_; }
-  int getMaxHp() const { return maxHp_; }
-  int getDamage() const { return damage_; }
-  int getPotionCount() const { return potionCount_; }
-  bool isAlive() const { return hp_ > 0; }
+  int getHp() const { return hp; }
+  int getMaxHp() const { return maxHp; }
+  int getDamage() const { return damage; }
+  int getPotionCount() const { return potionCount; }
+  bool isAlive() const { return hp > 0; }
 
  private:
-  int hp_, maxHp_;
-  int damage_;
-  int potionCount_;
+  int hp, maxHp;
+  int damage;
+  int potionCount;
 };

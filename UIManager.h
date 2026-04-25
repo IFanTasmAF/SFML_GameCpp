@@ -11,6 +11,6 @@ class UIManager {
             const std::string& message = "");
 
  private:
-  sf::Font& font_;
-  sf::Text healthText_, potionText_, messageText_;
+  sf::Font& font;
+  sf::Text healthText, potionText, messageText;
 };

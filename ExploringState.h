@@ -20,9 +20,9 @@ class ExploringState : public GameState {
   void startCombat(Game& game, Monster& monster, bool heroAttacksFirst);
   void removeEntity(Entity* entity);
   void addMessage(const std::string& msg);
-  Hero& getHero() { return hero_; }
-  Map& getMap() { return map_; }
-  std::vector<std::unique_ptr<Entity>>& getEntities() { return entities_; }
+  Hero& getHero() { return hero; }
+  Map& getMap() { return map; }
+  std::vector<std::unique_ptr<Entity>>& getEntities() { return entities; }
 
  private:
   void moveHero(int dx, int dy, Game& game);
@@ -35,20 +35,20 @@ class ExploringState : public GameState {
   void checkExit(Game& game);
   CentipedeSegment* getCentipedeHead();
 
-  Game& game_;
-  Map map_;
-  Hero hero_;
-  std::vector<std::unique_ptr<Entity>> entities_;
-  UIManager ui_;
-  std::string currentMessage_;
-  float messageTimer_;
-  sf::Vector2i lastMoveDirection_;
-  float currentDt_;
+  Game& game;
+  Map map;
+  Hero hero;
+  std::vector<std::unique_ptr<Entity>> entities;
+  UIManager ui;
+  std::string currentMessage;
+  float messageTimer;
+  sf::Vector2i lastMoveDirection;
+  float currentDt;
 
-  sf::View camera_;
+  sf::View camera;
   struct RadarBlip {
     sf::Vector2i direction;
     sf::Color color;
   };
-  std::vector<RadarBlip> radarBlips_;
+  std::vector<RadarBlip> radarBlips;
 };

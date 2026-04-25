@@ -13,17 +13,17 @@ class CentipedeSegment : public Monster {
   void update(float deltaTime, const Map& map,
               const std::vector<std::unique_ptr<Entity>>& entities) override;
   void drawAlert(sf::RenderWindow& window) override;
-  void setNextSegment(CentipedeSegment* next) { nextSegment_ = next; }
-  void setPrevSegment(CentipedeSegment* prev) { prevSegment_ = prev; }
-  void setTargetPos(const sf::Vector2i& pos) { targetPos_ = pos; }
-  bool isHead() const { return isHead_; }
-  CentipedeSegment* getNextSegment() const { return nextSegment_; }
+  void setNextSegment(CentipedeSegment* next) { nextSegment = next; }
+  void setPrevSegment(CentipedeSegment* prev) { prevSegment = prev; }
+  void setTargetPos(const sf::Vector2i& pos) { targetPos = pos; }
+  bool isHead() const { return isHeadSegment; }
+  CentipedeSegment* getNextSegment() const { return nextSegment; }
 
  private:
-  bool isHead_;
-  SegmentType type_;
-  CentipedeSegment* nextSegment_;
-  CentipedeSegment* prevSegment_;
-  sf::Vector2i targetPos_;
-  sf::Vector2i previousPos_;
+  bool isHeadSegment;
+  SegmentType type;
+  CentipedeSegment* nextSegment;
+  CentipedeSegment* prevSegment;
+  sf::Vector2i targetPos;
+  sf::Vector2i previousPos;
 };
