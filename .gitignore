@@ -1,0 +1,94 @@
+# Visual Studio
+*.sln
+*.vcxproj
+*.vcxproj.filters
+*.vcxproj.user
+*.user
+*.suo
+*.userprefs
+*.db
+*.opendb
+*.psess
+*.VC.db
+*.VC.opendb
+*.cache
+Debug/
+Release/
+x64/
+x86/
+ipch/
+.vs/
+.vscode/
+*.log
+
+# Сборка и объектные файлы
+*.obj
+*.exe
+*.pdb
+*.ilk
+*.idb
+*.tlog
+*.dll
+*.lib
+*.exp
+*.manifest
+*.dep
+*.aps
+*.ncb
+*.opt
+*.plg
+*.tmp
+*.sbr
+*.bsc
+
+# SFML (если вы компилируете статически, можете исключить)
+sfml-*.dll
+sfml-*.lib
+
+# Папка с текстурами (если вы не хотите хранить большие ресурсы в репозитории)
+# textures/
+
+# Файлы пользовательских настроек
+*.opensdf
+*.sdf
+*.VC.db-shm
+*.VC.db-wal
+
+# Файлы ассемблера и кэша IntelliSense
+*.asm
+*.ipdb
+*.iobj
+*.pyc
+__pycache__/
+
+# Файлы, создаваемые SFML в рантайме (если генерируются)
+*.ttf
+*.png
+*.jpg
+*.bmp
+*.wav
+*.ogg
+
+# Журналы и отчёты о тестировании
+*.log
+*.trx
+*.coverage
+*.coveragexml
+
+# Папки с пакетами NuGet (если используются)
+packages/
+*.nupkg
+
+# CMake (если используете)
+CMakeLists.txt.user
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+Makefile
+
+# Прочее
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db

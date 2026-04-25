@@ -19,31 +19,42 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="core\Game.cpp" />
-    <ClCompile Include="core\main.cpp" />
-    <ClCompile Include="entities\AggressiveMonster.cpp" />
-    <ClCompile Include="entities\Monster.cpp" />
-    <ClCompile Include="entities\PassiveMonster.cpp" />
-    <ClCompile Include="entities\Player.cpp" />
-    <ClCompile Include="states\GameOverState.cpp" />
-    <ClCompile Include="states\PlayState.cpp" />
-    <ClCompile Include="ui\UI.cpp" />
-    <ClCompile Include="world\Map.cpp" />
+    <ClInclude Include="Centipede.h" />
+    <ClInclude Include="Chest.h" />
+    <ClInclude Include="CombatState.h" />
+    <ClInclude Include="CombatSystem.h" />
+    <ClInclude Include="Constants.h" />
+    <ClInclude Include="Entity.h" />
+    <ClInclude Include="Exit.h" />
+    <ClInclude Include="ExploringState.h" />
+    <ClInclude Include="Game.h" />
+    <ClInclude Include="GameOverState.h" />
+    <ClInclude Include="GameState.h" />
+    <ClInclude Include="Hero.h" />
+    <ClInclude Include="Larva.h" />
+    <ClInclude Include="Map.h" />
+    <ClInclude Include="Monster.h" />
+    <ClInclude Include="ResourceManager.h" />
+    <ClInclude Include="SoundEvent.h" />
+    <ClInclude Include="UIManager.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="core\Game.h" />
-    <ClInclude Include="entities\AggressiveMonster.h" />
-    <ClInclude Include="entities\Entity.h" />
-    <ClInclude Include="entities\Monster.h" />
-    <ClInclude Include="entities\PassiveMonster.h" />
-    <ClInclude Include="entities\Player.h" />
-    <ClInclude Include="states\GameOverState.h" />
-    <ClInclude Include="states\GameState.h" />
-    <ClInclude Include="states\PlayState.h" />
-    <ClInclude Include="systems\CombatSystem.h" />
-    <ClInclude Include="ui\UI.h" />
-    <ClInclude Include="world\Map.h" />
-    <ClInclude Include="world\Tile.h" />
+    <ClCompile Include="Centipede.cpp" />
+    <ClCompile Include="Chest.cpp" />
+    <ClCompile Include="CombatState.cpp" />
+    <ClCompile Include="CombatSystem.cpp" />
+    <ClCompile Include="Entity.cpp" />
+    <ClCompile Include="Exit.cpp" />
+    <ClCompile Include="ExploringState.cpp" />
+    <ClCompile Include="Game.cpp" />
+    <ClCompile Include="GameOverState.cpp" />
+    <ClCompile Include="Hero.cpp" />
+    <ClCompile Include="Larva.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="Map.cpp" />
+    <ClCompile Include="Monster.cpp" />
+    <ClCompile Include="ResourceManager.cpp" />
+    <ClCompile Include="UIManager.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
